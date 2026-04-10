@@ -1,8 +1,19 @@
 import { useState, useEffect } from "react";
 
 /* ───────── DATA ───────── */
-const NAV_LINKS = ["Home", "About", "Services", "Portfolio", "Contact"];
-
+const NAV_LINKS = ["Home", "About", "Services", "Portfolio", "Help", "Contact"];
+const FAQS = [
+  { question: "How do I reserve a table?", answer: "You can reserve a table from the Contact page." },
+  { question: "Do you offer vegetarian options?", answer: "Yes, we have vegetarian and vegan dishes." },
+  { question: "What are your opening hours?", answer: "12 PM to 11 PM on weekdays." },
+  { question: "Can I host private events?", answer: "Yes, we offer private dining and events." },
+  { question: "Is advance booking required?", answer: "Recommended for weekends." },
+  { question: "Do you have parking facilities?", answer: "Yes, valet parking available." },
+  { question: "Is there a dress code?", answer: "Smart casual recommended." },
+  { question: "Do you offer takeaway?", answer: "Yes, takeaway available." },
+  { question: "Are pets allowed?", answer: "No pets allowed." },
+  { question: "Do you accept online payments?", answer: "Yes, UPI & cards accepted." },
+];
 const DISHES = [
   {
     name: "Truffle Mushroom Velouté",
@@ -159,24 +170,19 @@ function Navbar({ activePage, setActivePage }) {
           LUMIÈRE<span className="text-[#D8C3A5]">.</span>
         </button>
 
-        <ul className="hidden md:flex gap-8 items-center">
-          {NAV_LINKS.map((link) => (
-            <li key={link}>
-              <button
-                onClick={() => setActivePage(link)}
-                className={`uppercase text-[0.72rem] tracking-[0.22em] transition ${
-                  activePage === link
-                    ? "text-[#D8C3A5]"
-                    : "text-[#D9D4C8] hover:text-white"
-                }`}
-              >
-                {link}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <button
+       <ul className="flex gap-6">
+  {NAV_LINKS.map((link) => (
+    <li key={link}>
+      <button
+        onClick={() => setActivePage(link)}
+        className="cursor-pointer transition-all duration-300 text-white hover:text-[#D8C3A5]"
+      >
+        {link}
+      </button>
+    </li>
+  ))}
+</ul>
+          <button
           onClick={() => setActivePage("Contact")}
           className="hidden md:block px-5 py-2.5 rounded-full bg-[#D8C3A5] text-[#0D1B1E] text-[0.72rem] uppercase tracking-[0.18em] font-semibold hover:scale-105 transition"
         >
@@ -534,7 +540,44 @@ function Portfolio() {
     </div>
   );
 }
+function Help() {
+  const [openIndex, setOpenIndex] = useState(null);
 
+  return (
+    <div className="bg-[#0B1517] text-[#F8F4EC] pt-28">
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <SectionTag text="Support" />
+        <h2 className="font-serif text-5xl md:text-6xl mb-6 text-center">
+          Help & <span className="text-[#D8C3A5]">FAQs</span>
+        </h2>
+        <Divider />
+
+        <div className="mt-10 space-y-4">
+          {FAQS.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-[#13272C] border border-white/10 rounded-2xl p-5 cursor-pointer"
+              onClick={() =>
+                setOpenIndex(openIndex === index ? null : index)
+              }
+            >
+              <h3 className="font-serif text-xl flex justify-between items-center">
+                {faq.question}
+                <span>{openIndex === index ? "−" : "+"}</span>
+              </h3>
+
+              {openIndex === index && (
+                <p className="text-[#D9D4C8] mt-3 text-sm leading-relaxed">
+                  {faq.answer}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
 /* ───────── CONTACT ───────── */
 function Contact() {
   const [form, setForm] = useState({
@@ -714,7 +757,7 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const pages = { Home, About, Services, Portfolio, Contact };
+  const pages = { Home, About, Services, Portfolio, Help, Contact };
   const PageComponent = pages[activePage];
 
   return (
